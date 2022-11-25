@@ -1,23 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
-
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import "./App.css";
+import { addTodo } from "./store/todoSlice";
 function App() {
+  const [text, setText] = useState();
+  const todos = useSelector((state) => state.todos.todos); // ичинде инпуттун значениесы менен келди!
+  console.log(todos);
+  const dispatch = useDispatch();
+
+  const addTask = (e) => {
+    e.preventDefault();
+
+    dispatch(addTodo({ text }));
+    setText("");
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <form onSubmit={addTask}>
+        <input type="text" onChange={(e) => setText(e.target.value)} />
+        <button type="submit">submit</button>
+      </form>
+      <ul>
+        {todos.map((item) => (
+          <div key={item.id}>{item.title}</div>
+        ))}
+      </ul>
+      <button>delete</button>
     </div>
   );
 }
